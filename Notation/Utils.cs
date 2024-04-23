@@ -29,7 +29,7 @@ namespace Hive
             };
             internal static Cell getCellFromDirection(Cell origin, FTHexCorner dir)
             {
-                return new Cell(origin.x + HiveUtils.corners[dir].x, origin.y + HiveUtils.corners[dir].y, origin.z + HiveUtils.corners[dir].z);
+                return new Cell(origin.x + HexUtils.corners[dir].x, origin.y + HexUtils.corners[dir].y, origin.z + HexUtils.corners[dir].z);
             }
 
             internal static Dictionary<Pieces, string> reversedPieceDict = pieceDict.ToDictionary(x => x.Value, x => x.Key);

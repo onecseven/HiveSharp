@@ -12,7 +12,7 @@ namespace Hive
         {
             string prelim = toNotationSubject(reference.activePiece.type, reference.activePiece.owner, reference.activePiece.id);
             if (isBeetleMove) return prelim;
-            foreach (FTHexCorner hexCorner in HiveUtils.corners.Keys)
+            foreach (FTHexCorner hexCorner in HexUtils.corners.Keys)
             {
                 Cell toCheck = getCellFromDirection(location, hexCorner);
                 if (reference.cell == toCheck)
@@ -42,7 +42,7 @@ namespace Hive
             }
             throw new Exception("weird happening");
         }
-        public static List<string> moveListToNotation(List<Move> moves)
+        public static List<string> moveListToNotation(List<Move> moves) 
         {
                 #region declarations
 
@@ -85,7 +85,7 @@ namespace Hive
             }
             string Objeto(Cell destination)
             {
-                foreach (FTHexCorner hexCorner in HiveUtils.corners.Keys)
+                foreach (FTHexCorner hexCorner in HexUtils.corners.Keys)
                 {
                     Cell toCheck = getCellFromDirection(destination, hexCorner);
                     if (map.ContainsKey(toCheck))

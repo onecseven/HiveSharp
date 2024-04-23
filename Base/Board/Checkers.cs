@@ -2,7 +2,7 @@ namespace Hive
 {
     public partial class Board
     {
-        public bool AreCellsAdjacent(Cell a, Cell B) => HiveUtils.getNeighbors(a).Contains(B);
+        public bool AreCellsAdjacent(Cell a, Cell B) => HexUtils.getNeighbors(a).Contains(B);
         public bool CanMoveAboveHive(Cell a, Cell b)
         {
             List<Cell> adjacents = connectingAdjacents(a, b);

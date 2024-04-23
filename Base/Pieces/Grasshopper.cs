@@ -33,7 +33,7 @@ namespace Hive
         public static List<Path> _getLegalMoves(Board board, Cell origin)
         {
             List<Path> result = new List<Path>();
-            foreach (Cell direction in HiveUtils.directions)
+            foreach (Cell direction in HexUtils.directions)
             {
                 Cell current = new Cell(origin.x + direction.x, origin.y + direction.y, origin.z + direction.z);
                 if (board.tileIsOccupied(current)) result.Add(traverseDirection(current, direction, board));

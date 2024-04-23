@@ -4,7 +4,7 @@ namespace Hive
     {
         public List<Cell> getEmptyNeighbors(Cell cell) => getNeighbors(cell).Where(x => !tileIsOccupied(x)).ToList();
         public List<Cell> getOccupiedNeighbors(Cell cell) => getNeighbors(cell).Where(x => tileIsOccupied(x)).ToList();
-        public List<Cell> getNeighbors(Cell origin) => HiveUtils.getNeighbors(origin).ToList();
+        public List<Cell> getNeighbors(Cell origin) => HexUtils.getNeighbors(origin).ToList();
         public List<Cell> adjacentLegalCells(Cell cell)
         {
             List<Cell> empty = getEmptyNeighbors(cell);
@@ -32,8 +32,8 @@ namespace Hive
                | x |     
              `  \ /
              */
-            List<Cell> aNeighbors = HiveUtils.getNeighbors(a);
-            List<Cell> bNeighbors = HiveUtils.getNeighbors(b);
+            List<Cell> aNeighbors = HexUtils.getNeighbors(a);
+            List<Cell> bNeighbors = HexUtils.getNeighbors(b);
             List<Cell> union = aNeighbors.Intersect(bNeighbors).ToList();
             if (union.Count > 0 && union.Count == 2) return union;
             else throw new Exception("connectingAdjacents fucked up somewhere!");
