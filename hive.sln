@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34004.107
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hive", "hive.csproj", "{2A53ED6F-8CD3-4FB1-900E-DBCE6006F116}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A53ED6F-8CD3-4FB1-900E-DBCE6006F116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A53ED6F-8CD3-4FB1-900E-DBCE6006F116}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A53ED6F-8CD3-4FB1-900E-DBCE6006F116}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A53ED6F-8CD3-4FB1-900E-DBCE6006F116}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {55699B12-8804-4E46-865F-CCA6AE2341FE}
+	EndGlobalSection
+EndGlobal
