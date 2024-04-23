@@ -5,7 +5,6 @@ using System.Runtime.ExceptionServices;
 
 namespace Hive
 {
- 
     public partial class Hive
     {
         public Phases game_status = Phases.PREPARED;
@@ -18,7 +17,6 @@ namespace Hive
         };
         public Board board = new Board();
         public Players? winner = null;
-
         //when the constructor is over
         public delegate void gameIsReadyEventHandler();
         public event gameIsReadyEventHandler gameIsReady;
@@ -31,11 +29,9 @@ namespace Hive
         //when the game is done
         public delegate void onGameOverEventHandler();
         public event onGameOverEventHandler onGameOver;
-
         public Hive()
         {
         }
-
         public void send_move(Move move)
         {
             if (!moveIsValid(move) || game_status == Phases.GAME_OVER)
@@ -62,14 +58,12 @@ namespace Hive
             if (wincon_check()) game_over();
             else advanceTurn();
         }
-
         public void advanceTurn()
         {
 
             turn = ((Players)((int)turn ^ 1));
             autopassCheck();
         }
-
         private void game_over()
         {
             game_status = Phases.GAME_OVER;
@@ -107,8 +101,28 @@ namespace Hive
             }
         }
         private void initialPlace(INITIAL_PLACE move) => place(new PLACE(move.player, move.piece, move.destination));
-        #region rule checkers
-        //freedom to move is on boardnode
-        #endregion
+        private bool moveIsValid(Move move)
+        {
+            if (move.player != turn || (mustPlayBee(move.player) && (move.piece != Pieces.BEE)))
+            {
+                return false;
+            }
+            switch (move.type)
+            {
+                case MoveType.INITIAL_PLACE:
+                    INITIAL_PLACE initialPlaceCasted = (INITIAL_PLACE)move;
+                    return initialPlacementCheck(initialPlaceCasted);
+                case MoveType.PLACE:
+                    PLACE placeCasted = (PLACE)move;
+                    return placementLegalityCheck(placeCasted.destination, placeCasted.player, placeCasted.piece);
+                case MoveType.MOVE_PIECE:
+                    MOVE_PIECE moveCasted = (MOVE_PIECE)move;
+                    if (moveIsLegal(moveCasted) == false || oneHiveRuleCheck(moveCasted.origin) == false) return false;
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
     }
 }
