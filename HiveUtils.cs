@@ -1,4 +1,3 @@
-using Hive;
 using System.Numerics;
 
 namespace Hive
