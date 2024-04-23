@@ -96,9 +96,6 @@ namespace Hive
             List<Piece> actualPieces = surroundingPieces.Select(cel => board.tiles[cel].activePiece).ToList();
             bool piecesBelongToMover = actualPieces.All(pieces => player == pieces.owner);
             bool playerHasPieceInHand = checkIfPlayerHasPieceInInventory(player, piece);
-            //GD.Print("Player has pieces to connect: ", actualPieces.Count > 0);
-            //GD.Print("Pieces belong to mover: ", piecesBelongToMover);
-            //GD.Print("Player has piece " + piece + " in inventory: ", playerHasPieceInHand);
             if (actualPieces.Count > 0 && piecesBelongToMover && playerHasPieceInHand) return true;
             return false;
         }

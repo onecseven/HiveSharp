@@ -1,6 +1,6 @@
 namespace Hive
 {
-    public class Board
+    public partial class Board
     {
         public Dictionary<Cell, Tile> tiles = new Dictionary<Cell, Tile>();
         public List<Cell> filteredPiecesInPlay { get { return tiles.Where(kvp => kvp.Value.isOccupied).ToList().Select(KeyValuePair => KeyValuePair.Key).ToList(); } }
@@ -18,56 +18,6 @@ namespace Hive
         }
         public void placePiece(Piece pieceToPlace) => tiles[pieceToPlace.location].addPiece(pieceToPlace);
      
-        #region checkers
-        public bool AreCellsAdjacent(Cell a, Cell B) => HiveUtils.getNeighbors(a).Contains(B);
-        public bool CanMoveAboveHive(Cell a, Cell b)
-        {
-            List<Cell> adjacents = connectingAdjacents(a, b);
-            return !adjacents.All(cell => tileIsOccupied(cell) && tiles[cell].hasBlockedPiece);
-        }
-        public bool CanMoveBetween(Cell a, Cell b) => !connectingAdjacents(a, b).All(cell => tileIsOccupied(cell));
-        public bool tileIsOccupied(Cell cell) => tiles.ContainsKey(cell) && tiles[cell].isOccupied;
-        #endregion
-        
-        #region distillation
-        public List<Cell> getEmptyNeighbors(Cell cell) => getNeighbors(cell).Where(x => !tileIsOccupied(x)).ToList();
-        public List<Cell> getOccupiedNeighbors(Cell cell) => getNeighbors(cell).Where(x => tileIsOccupied(x)).ToList();
-        public List<Cell> getNeighbors(Cell origin) => HiveUtils.getNeighbors(origin).ToList();
-        public List<Cell> adjacentLegalCells(Cell cell)
-        {
-            List<Cell> empty = getEmptyNeighbors(cell);
-            List<Cell> neighbors = getOccupiedNeighbors(cell);
-            HashSet<Cell> neighbor_adjacent = new HashSet<Cell>();
-            foreach (Cell neighbor in neighbors)
-            {
-                List<Cell> neighborAdjacentEmpties = getEmptyNeighbors(neighbor);
-                neighborAdjacentEmpties.ForEach(temp_tile => neighbor_adjacent.Add(temp_tile));
-            }
-            var prelim = empty.Intersect(neighbor_adjacent).ToList();
-            return prelim.ToList();
-        }
-        public List<Cell> connectingAdjacents(Cell a, Cell b)
-        {
-            //this is for the freedom to move rule
-            /*
-             *returns {xy}
-
-               /  \
-              |  y |
-             / \  /  \
-            | a ||  b |
-             \ /  \  /
-               | x |     
-             `  \ /
-             */
-            List<Cell> aNeighbors = HiveUtils.getNeighbors(a);
-            List<Cell> bNeighbors = HiveUtils.getNeighbors(b);
-            List<Cell> union = aNeighbors.Intersect(bNeighbors).ToList();
-            if (union.Count > 0 && union.Count == 2) return union;
-            else throw new Exception("connectingAdjacents fucked up somewhere!");
-        }
-        #endregion
-
         //SEND TO SPIDER/ANT RESPECTIVELY
         public List<Cell> hypotheticalAdjacentLegalCells(Cell cell, Cell exclude)
         {
