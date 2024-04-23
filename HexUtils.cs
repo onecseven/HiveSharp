@@ -160,7 +160,7 @@ namespace Hive
         return new Vector2[6][] {ABP, BCP, CDP, DEP, EFP, AFP};
     }
 
-    static public Vector2[][] SliceHexIntoTriangles(Vector3 center, int radius, HexOrientation orientation) => SliceHexIntoTriangles(new Godot.Vector2(center.X, center.Y), radius, orientation);
+    static public Vector2[][] SliceHexIntoTriangles(Vector3 center, int radius, HexOrientation orientation) => SliceHexIntoTriangles(new Vector2(center.X, center.Y), radius, orientation);
     
 #endregion
 static public Vector2[] HexCornersFromCenter(Vector3 origin, int radius, HexOrientation orientation)
@@ -173,14 +173,14 @@ static public Vector2[] HexCornersFromCenter(Vector3 origin, int radius, HexOrie
             {
                 var y = origin.Y + radius * Math.Cos(a * 60 * Math.PI / 180f);
                 var x = origin.X + radius * Math.Sin(a * 60 * Math.PI / 180f);
-                result[a] = new Godot.Vector2(System.Convert.ToSingle(x), System.Convert.ToSingle(y));
+                result[a] = new Vector2(System.Convert.ToSingle(x), System.Convert.ToSingle(y));
             }
 
         } else {
             for (int a = 0; a < 6; a++) {
                 var y = origin.Y + radius * Math.Sin(a * 60 * Math.PI / 180f);
                 var x = origin.X + radius * Math.Cos(a * 60 * Math.PI / 180f);
-                result[a] = new Godot.Vector2(System.Convert.ToSingle(x), System.Convert.ToSingle(y));
+                result[a] = new Vector2(System.Convert.ToSingle(x), System.Convert.ToSingle(y));
             }
         }
 
