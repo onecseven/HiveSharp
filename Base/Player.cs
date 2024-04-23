@@ -7,7 +7,7 @@ namespace Hive
     }
     public class Player
     {
-        private readonly Dictionary<Pieces, int> reference = new Dictionary<Pieces, int>()
+        private readonly static Dictionary<Pieces, int> reference = new Dictionary<Pieces, int>()
         {
             [Pieces.BEE] = 1,
             [Pieces.MOSQUITO] = 1,
@@ -18,6 +18,7 @@ namespace Hive
             [Pieces.GRASSHOPPER] = 3
 
         };
+
         public Dictionary<Pieces, int> inventory = new Dictionary<Pieces, int>()
         {
             [Pieces.BEE] = 1,
@@ -29,14 +30,14 @@ namespace Hive
             [Pieces.GRASSHOPPER] = 3
 
         };
+
         public Players color;
 
         public Player(Players _color)
         {
             color = _color;
         }
-
-        public int piecePlaced(Pieces _piece)
+        internal int piecePlaced(Pieces _piece)
         {
             if (hasPiece(_piece)) inventory[_piece]--;
             else throw new ArgumentOutOfRangeException("piece placed called when player is out of pieces");

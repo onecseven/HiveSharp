@@ -1,11 +1,3 @@
-using Sylves;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
 //TODO make hive its own separate library
 namespace Hive
 {
@@ -15,9 +7,6 @@ namespace Hive
         {
             if (move.player != turn || (mustPlayBee(move.player) && (move.piece != Pieces.BEE)))
             {
-                //GD.Print((move.piece != Pieces.BEE));
-                //GD.Print(mustPlayBee(move.player));
-                //GD.PrintErr("Must Play Bee or wrong player.");
                 return false;
             }
             switch (move.type)
@@ -42,11 +31,13 @@ namespace Hive
         bool moveIsLegal(MOVE_PIECE move)
         {
             // check that the piece is in play
-            if ((!board.piecesInPlay[move.origin].isOccupied && move.piece != Pieces.BEETLE) || board.piecesInPlay[move.origin].activePiece.owner != move.player) return false;
-            Piece piece = board.piecesInPlay[move.origin].activePiece;
+            if ((!board.tiles[move.origin].isOccupied && move.piece != Pieces.BEETLE) || board.tiles[move.origin].activePiece.owner != move.player) return false;
+            
+            Piece piece = board.tiles[move.origin].activePiece;
             List<Path> paths = Piece.getLegalMoves(piece, board);
             Path playerPath = paths[paths.FindIndex(path => path.last == move.destination)];
-            List<Sylves.Cell> endpoints = paths.Select(path => path.last).ToList();
+            List<Cell> endpoints = paths.Select(path => path.last).ToList();
+            
             if (endpoints.Contains(move.destination) && pathIsLegal(playerPath, piece.type, move)) return true;
             else return false;
         }
@@ -76,8 +67,8 @@ namespace Hive
                 case Pieces.MOSQUITO:
                     return pathIsLegal(path, path.pathType, move);
                 case Pieces.BEETLE:
-                    var originTile = board.piecesInPlay[move.origin];
-                    var destTile = board.piecesInPlay[path.last];
+                    var originTile = board.tiles[move.origin];
+                    var destTile = board.tiles[path.last];
                     // horizontal movement above hive
                     if ((originTile.zIndex - 1) == destTile.zIndex && originTile.zIndex > 0)
                     {
@@ -101,8 +92,8 @@ namespace Hive
         bool placementLegalityCheck(Cell destination, Players player, Pieces piece)
         {
             bool checkIfPlayerHasPieceInInventory(Players player, Pieces piece) => players[player].hasPiece(piece);
-            List<Sylves.Cell> surroundingPieces = board.getOccupiedNeighbors(destination);
-            List<Piece> actualPieces = surroundingPieces.Select(cel => board.piecesInPlay[cel].activePiece).ToList();
+            List<Cell> surroundingPieces = board.getOccupiedNeighbors(destination);
+            List<Piece> actualPieces = surroundingPieces.Select(cel => board.tiles[cel].activePiece).ToList();
             bool piecesBelongToMover = actualPieces.All(pieces => player == pieces.owner);
             bool playerHasPieceInHand = checkIfPlayerHasPieceInInventory(player, piece);
             //GD.Print("Player has pieces to connect: ", actualPieces.Count > 0);
@@ -127,8 +118,6 @@ namespace Hive
             bool hasPlayedBee = moves.Where(move => move.player == player).Where(move => move.type == MoveType.INITIAL_PLACE || move.type == MoveType.PLACE).Any(move => move.piece == Pieces.BEE);
             bool hasPlayedThreeMoves = (moves.Where(move => move.player == player).ToList().Count) == 3;
             bool belowLimit = (moves.Where(move => move.player == player).ToList().Count) < 3;
-            //GD.Print("hasPlayedBee ", hasPlayedBee);
-            //GD.Print("hasPlayedThreeMoves " + hasPlayedThreeMoves + " has actually played: " + moves.Where(move => move.player == player).ToList().Count);
             if (hasPlayedThreeMoves && !hasPlayedBee) return true;
             else if (!belowLimit && !hasPlayedThreeMoves && !hasPlayedBee)
             {
@@ -157,26 +146,21 @@ namespace Hive
         bool hasLegalPlacementTarget(Players player)
         {
             if (moves.Count <= 2) return true;
-            //br
-            List<Piece> playerPieces = board.piecesInPlay.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).Select(kvp => kvp.Value.activePiece).ToList();
+            List<Piece> playerPieces = board.tiles.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).Select(kvp => kvp.Value.activePiece).ToList();
             foreach (Piece item in playerPieces)
             {
-                //br
                 List<Cell> neighbors = board.getEmptyNeighbors(item.location);
                 if (neighbors.Any(neigh => placementLegalityCheck(neigh, player, item.type))) return true;
             }
             return false;
         }
-        //br
-        bool playerHasPiecesInPlay(Players player) => board.piecesInPlay.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).ToList().Count < 13;
+        bool playerHasPiecesInPlay(Players player) => board.tiles.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).ToList().Count < 13;
         bool playerHasPossibleMoves(Players player)
         {
-            //br
-            List<Piece> playerPieces = board.piecesInPlay.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).Select(kvp => kvp.Value.activePiece).ToList();
+            List<Piece> playerPieces = board.tiles.Where(kvp => kvp.Value.isOccupied && kvp.Value.activePiece.owner == player).Select(kvp => kvp.Value.activePiece).ToList();
             List<Path> possibleMoves = new List<Path>();
             foreach (Piece piece in playerPieces)
             {
-                //piece rewrite
                 possibleMoves.AddRange(Piece.getLegalMoves(piece, board));
             }
             if (possibleMoves.Count == 0 || possibleMoves.All(path => path.isNullPath)) return false;
@@ -188,7 +172,6 @@ namespace Hive
 
         private HashSet<Cell> recursiveGetNeighbors(Cell cell, HashSet<Cell> memo, Cell? excludedCell)
         {
-            //br
             List<Cell> neighbors = board.getOccupiedNeighbors(cell);
             if (excludedCell.HasValue) neighbors.Remove(excludedCell.Value);
             if (neighbors.Count == 0 || neighbors.All(item => memo.Contains(item))) return memo;
@@ -205,10 +188,9 @@ namespace Hive
         public bool oneHiveRuleCheck(Cell movingPiece)
         {
             HashSet<Cell> hypoHive = new HashSet<Cell>();
-            //br
             List<Cell> prelim = board.filteredPiecesInPlay;
             //FIXME account for empty boards
-            Tile tile = board.piecesInPlay[movingPiece];
+            Tile tile = board.tiles[movingPiece];
             if (!tile.hasBlockedPiece)
             {
                 prelim.Remove(movingPiece);
@@ -222,7 +204,7 @@ namespace Hive
         #endregion
         public bool wincon_check()
         {
-            List<Piece> bees = board.piecesInPlay.Where(kvp => kvp.Value.isOccupied && kvp.Value.pieces.Any(pie => pie.type == Pieces.BEE)).Select(kvp => kvp.Value.activePiece).ToList();
+            List<Piece> bees = board.tiles.Where(kvp => kvp.Value.isOccupied && kvp.Value.pieces.Any(pie => pie.type == Pieces.BEE)).Select(kvp => kvp.Value.activePiece).ToList();
             if (bees.Any(piece => board.getOccupiedNeighbors(piece.location).Count == 6)) return true;
             return false;
         }

@@ -151,7 +151,7 @@ namespace Hive
         private void game_over()
         {
             game_status = Phases.GAME_OVER;
-            List<KeyValuePair<Cell, Tile>> bees = board.piecesInPlay.Where(kvp => kvp.Value.isOccupied && kvp.Value.pieces.Any(pie => pie.type == Pieces.BEE)).ToList();
+            List<KeyValuePair<Cell, Tile>> bees = board.tiles.Where(kvp => kvp.Value.isOccupied && kvp.Value.pieces.Any(pie => pie.type == Pieces.BEE)).ToList();
             if (bees.All(kvp => board.getOccupiedNeighbors(kvp.Key).Count == 6))
             {
             }
@@ -171,9 +171,9 @@ namespace Hive
         }
         private void move(MOVE_PIECE move)
         {
-            Piece originalPiece = board.piecesInPlay[move.origin].activePiece;
-            if ((board.piecesInPlay[move.origin].isOccupied && !board.piecesInPlay[move.destination].isOccupied) ||
-                (board.piecesInPlay[move.destination].isOccupied && (move.piece == Pieces.BEETLE || move.piece == Pieces.MOSQUITO))
+            Piece originalPiece = board.tiles[move.origin].activePiece;
+            if ((board.tiles[move.origin].isOccupied && !board.tiles[move.destination].isOccupied) ||
+                (board.tiles[move.destination].isOccupied && (move.piece == Pieces.BEETLE || move.piece == Pieces.MOSQUITO))
                 )
             {
                 Piece newPiece = Piece.create(originalPiece.type, originalPiece.owner, move.destination, originalPiece.id);
