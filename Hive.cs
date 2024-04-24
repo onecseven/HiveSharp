@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-
 namespace Hive
 {
     public partial class Hive
@@ -34,6 +29,8 @@ namespace Hive
         }
         public void send_move(Move move)
         {
+            if (moves.Count == 0) this.game_status = Phases.INITIAL;
+            else if (moves.Count == 1) this.game_status = Phases.WAITING_FOR_MOVE;
             if (!moveIsValid(move) || game_status == Phases.GAME_OVER)
             {
                 onFailedMove?.Invoke("Invalid Move");
@@ -60,7 +57,6 @@ namespace Hive
         }
         public void advanceTurn()
         {
-
             turn = ((Players)((int)turn ^ 1));
             autopassCheck();
         }
