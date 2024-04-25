@@ -55,7 +55,7 @@ namespace Hive
             if (wincon_check()) game_over();
             else advanceTurn();
         }
-        public void advanceTurn()
+        private void advanceTurn()
         {
             turn = ((Players)((int)turn ^ 1));
             autopassCheck();
@@ -78,7 +78,7 @@ namespace Hive
         {
             Player pieceOwner = players[move.player];
             var id = pieceOwner.piecePlaced(move.piece);
-            Piece newPiece = Piece.create(move.piece, move.player, (move.destination), id);
+            Piece newPiece = Piece.create(move.piece, move.player, move.destination, id);
             board.placePiece(newPiece);
         }
         private void move(MOVE_PIECE move)

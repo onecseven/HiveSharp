@@ -8,9 +8,6 @@ namespace Hive
 {
     public class Mosquito : Piece
     {
-        //FIXME implement beetle mode?
-        bool beetleMode = false;
-        Piece blockedPiece = null;
         public static List<Path> _getLegalMoves(Board board, Cell origin)
         {
 

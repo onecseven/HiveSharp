@@ -9,6 +9,9 @@ namespace Hive
         MOSQUITO,
         BEETLE,
         LADYBUG,
+        //TODO
+        //the loathsome
+        //PILLBUG,
     }
     public class Piece
     {

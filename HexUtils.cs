@@ -204,5 +204,4 @@ static public Vector2[] HexCornersFromCenter(Vector3 origin, int radius, HexOrie
     }
     static public Vector2[] HexCornersFromCenter(Vector2 origin, int radius, HexOrientation orientation) => HexCornersFromCenter(new Vector3(origin.X, origin.Y, 0), radius, orientation);
 }
-
 }

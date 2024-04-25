@@ -18,7 +18,6 @@ namespace Hive
             }
             
             //FIXME add isValidUnformattedMoveList
-
             internal static bool IsValidMoveListToken(string line)
             {
                 var a = line.Split(":").ToList();

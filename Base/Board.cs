@@ -6,6 +6,10 @@ namespace Hive
         public List<Cell> filteredPiecesInPlay { get { return tiles.Where(kvp => kvp.Value.isOccupied).ToList().Select(KeyValuePair => KeyValuePair.Key).ToList(); } }
         public Board()
         {
+            //HACK it occurs to me that it might not be necessary to create all these empty tiles that will never be used, but on the other hand
+            //it does save us from the constant tiles.Contains[cell]
+            //but it does mean whenever we want to query tiles we basically have to go through 1000~ empty pieces each time...
+            //then again, that seems like an infinitesimal amount to any processor from the last two decades
             foreach (Cell cell in HexUtils.HexGen(36, 24, HexOrientation.PointyTopped))
             {
                 tiles.Add(cell, new Tile(cell));
@@ -17,8 +21,8 @@ namespace Hive
             tiles[piece.location].addPiece(piece);
         }
         public void placePiece(Piece pieceToPlace) => tiles[pieceToPlace.location].addPiece(pieceToPlace);
-     
-        //SEND TO SPIDER/ANT RESPECTIVELY
+        //TODO SEND TO SPIDER/ANT RESPECTIVELY
+        #region spider-specific queries
         public List<Cell> hypotheticalAdjacentLegalCells(Cell cell, Cell exclude)
         {
             List<Cell> empty = getEmptyNeighbors(cell);
@@ -33,7 +37,15 @@ namespace Hive
             var prelim = empty.Intersect(neighbor_adjacent).Where(next => hypotheticallCanMoveBetween(cell, next, exclude)).ToList();
             return prelim.ToList();
         }
-        //FIXME WONTFIX this is awful
+        public bool hypotheticallCanMoveBetweenForAnts(Cell a, Cell b, List<Cell> exclude)
+        {
+            List<Cell> adjacents = connectingAdjacents(a, b);
+            if (adjacents.Intersect(exclude).Count() > 0) return true;
+            else return !adjacents.All(cell => tileIsOccupied(cell));
+        }
+
+        #endregion
+        #region ant specific queries
         public List<Cell> hypotheticalAdjacentLegalCellsForAnts(Cell cell, List<Cell> exclude)
         {
             List<Cell> empty = getEmptyNeighbors(cell);
@@ -51,19 +63,12 @@ namespace Hive
             var prelim = empty.Intersect(neighbor_adjacent).Where(next => hypotheticallCanMoveBetweenForAnts(cell, next, exclude)).ToList();
             return prelim.ToList();
         }
-
         public bool hypotheticallCanMoveBetween(Cell a, Cell b, Cell exclude)
         {
             List<Cell> adjacents = connectingAdjacents(a, b);
             if (adjacents.Contains(exclude)) return true;
             else return !adjacents.All(cell => tileIsOccupied(cell));
         }
-        public bool hypotheticallCanMoveBetweenForAnts(Cell a, Cell b, List<Cell> exclude)
-        {
-            List<Cell> adjacents = connectingAdjacents(a, b);
-            if (adjacents.Intersect(exclude).Count() > 0) return true;
-            else return !adjacents.All(cell => tileIsOccupied(cell));
-        }
-
+        #endregion
     }
 }

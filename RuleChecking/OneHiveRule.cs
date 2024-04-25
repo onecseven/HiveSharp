@@ -17,7 +17,7 @@
             }
             return memo;
         }
-        public bool oneHiveRuleCheck(Cell movingPiece)
+        private bool oneHiveRuleCheck(Cell movingPiece)
         {
             HashSet<Cell> hypoHive = new HashSet<Cell>();
             List<Cell> prelim = board.filteredPiecesInPlay;

@@ -1,4 +1,3 @@
-//TODO make hive its own separate library
 namespace Hive
 {
     public partial class Hive
