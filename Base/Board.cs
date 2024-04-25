@@ -21,22 +21,9 @@ namespace Hive
             tiles[piece.location].addPiece(piece);
         }
         public void placePiece(Piece pieceToPlace) => tiles[pieceToPlace.location].addPiece(pieceToPlace);
-        //TODO SEND TO SPIDER/ANT RESPECTIVELY
+        //TODO SEND ANT RESPECTIVELY
         #region spider-specific queries
-        public List<Cell> hypotheticalAdjacentLegalCells(Cell cell, Cell exclude)
-        {
-            List<Cell> empty = getEmptyNeighbors(cell);
-            List<Cell> neighbors = getOccupiedNeighbors(cell);
-            neighbors.Remove(exclude);
-            HashSet<Cell> neighbor_adjacent = new HashSet<Cell>();
-            foreach (Cell neighbor in neighbors)
-            {
-                List<Cell> neighborAdjacentEmpties = getEmptyNeighbors(neighbor);
-                neighborAdjacentEmpties.ForEach(temp_tile => neighbor_adjacent.Add(temp_tile));
-            }
-            var prelim = empty.Intersect(neighbor_adjacent).Where(next => hypotheticallCanMoveBetween(cell, next, exclude)).ToList();
-            return prelim.ToList();
-        }
+
         public bool hypotheticallCanMoveBetweenForAnts(Cell a, Cell b, List<Cell> exclude)
         {
             List<Cell> adjacents = connectingAdjacents(a, b);
