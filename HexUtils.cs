@@ -23,6 +23,14 @@ namespace Hive
 
         public int z;
 
+        public Cell[] neighbors {get => new Cell[6] {new Cell(x+1, y, z-1),
+                                                    new Cell(x+1, y-1, z),
+                                                    new Cell(x, y-1, z+1),
+                                                    new Cell(x-1, y, z+1), 
+                                                    new Cell(x-1, y+1, z), 
+                                                    new Cell(x, y+1, z-1)};
+            }
+
         [DebuggerStepThrough]
         public Cell(int x, int y)
         {
@@ -105,7 +113,7 @@ namespace Hive
         [FTHexCorner.UpLeft] = new Cell(0, -1, +1),
         [FTHexCorner.DownLeft] = new Cell(-1, +1, 0),
     };
-        public static Cell[] directions = new Cell[6] {
+    public static Cell[] directions = new Cell[6] {
         new Cell(+1, 0, -1), new Cell(+1, -1, 0), new Cell(0, -1, +1),
         new Cell(-1, 0, +1), new Cell(-1, +1, 0), new Cell(0, +1, -1),
     };
@@ -180,7 +188,6 @@ namespace Hive
 #endregion
 static public Vector2[] HexCornersFromCenter(Vector3 origin, int radius, HexOrientation orientation)
     {
-        //FIXME
         Vector2[] result = new Vector2[7];
         if (orientation is HexOrientation.PointyTopped)
         {
