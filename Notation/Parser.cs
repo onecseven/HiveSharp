@@ -83,8 +83,7 @@ namespace Hive
             internal static List<(Subject, Objet)> Parse(List<List<string>> moves) => moves.Select(ParseMove).ToList();
             internal static Subject parseUnformatted(string lowercase, bool isSubject)
             {
-                Regex template = new Regex(@"([\/\\-])?([wb]{1}){1}([SAQBMLGPsaqbmlgp]{1})([123]{1})?([\/\\-])?|([\.])");
-                System.Text.RegularExpressions.Match item = template.Match(lowercase);
+                System.Text.RegularExpressions.Match item = rawMoveTemplate.Match(lowercase);
                 if (item.Success)
                 {
                     var values = item.Groups.Values.ToList();
