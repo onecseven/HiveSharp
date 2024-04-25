@@ -73,7 +73,6 @@ namespace Hive
                 {
                     subject.numMarker = int.Parse(numberSpecifierParticle.Match(subj).Value[1].ToString());
                 };
-                //GD.Print("Original: ", subj, "\nParsed: ", subject.ToNotation(), "\n");
                 return subject;
             }
             private static (Subject, Objet) ParseMove(List<string> tokenized)
