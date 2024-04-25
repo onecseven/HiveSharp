@@ -21,7 +21,15 @@ namespace Hive
             }
             return tokenized;
         }
-        //TODO tokenizeRaw
+
+        public static List<List<string>> TokenizeRaw(string moveList) => moveList
+                                                                        .Split("\n")
+                                                                        .ToList<string>()
+                                                                        .Where(str => str.Count() > 0)
+                                                                        .Select(TokenizeMoveRaw)
+                                                                        .ToList();
+
+        
         public static List<string> TokenizeMoveRaw(string move) => move.Split(" ").ToList<string>().Where(str => str.Count() > 0).ToList();
         internal static List<string> TokenizeFormattedMove(string move)
         {
