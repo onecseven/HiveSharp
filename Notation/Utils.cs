@@ -11,6 +11,7 @@ namespace Hive
     {
         internal static class Shared
         {
+            public static Regex rawMoveTemplate = new Regex(@"([\/\\-])?([wb]{1}){1}([SAQBMLGPsaqbmlgp]{1})([123]{1})?([\/\\-])?|([\.])");
             public static Regex moveListPattern = new Regex(@"(([\/\\-])?([wb]{1}){1}([SAQBMLGP]{1})([123]{1})?([\/\\-])?|[\.])");
             public static Regex positionalParticle = new Regex(@"([\/\\-])");
             public static Regex playerMark = new Regex(@"([wb]{1}){1}");
