@@ -21,41 +21,6 @@ namespace Hive
             tiles[piece.location].addPiece(piece);
         }
         public void placePiece(Piece pieceToPlace) => tiles[pieceToPlace.location].addPiece(pieceToPlace);
-        //TODO SEND ANT RESPECTIVELY
-        #region spider-specific queries
 
-        public bool hypotheticallCanMoveBetweenForAnts(Cell a, Cell b, List<Cell> exclude)
-        {
-            List<Cell> adjacents = connectingAdjacents(a, b);
-            if (adjacents.Intersect(exclude).Count() > 0) return true;
-            else return !adjacents.All(cell => tileIsOccupied(cell));
-        }
-
-        #endregion
-        #region ant specific queries
-        public List<Cell> hypotheticalAdjacentLegalCellsForAnts(Cell cell, List<Cell> exclude)
-        {
-            List<Cell> empty = getEmptyNeighbors(cell);
-            List<Cell> neighbors = getOccupiedNeighbors(cell);
-            foreach (Cell toExclude in exclude)
-            {
-                neighbors.Remove(toExclude);
-            }
-            HashSet<Cell> neighbor_adjacent = new HashSet<Cell>();
-            foreach (Cell neighbor in neighbors)
-            {
-                List<Cell> neighborAdjacentEmpties = getEmptyNeighbors(neighbor);
-                neighborAdjacentEmpties.ForEach(temp_tile => neighbor_adjacent.Add(temp_tile));
-            }
-            var prelim = empty.Intersect(neighbor_adjacent).Where(next => hypotheticallCanMoveBetweenForAnts(cell, next, exclude)).ToList();
-            return prelim.ToList();
-        }
-        public bool hypotheticallCanMoveBetween(Cell a, Cell b, Cell exclude)
-        {
-            List<Cell> adjacents = connectingAdjacents(a, b);
-            if (adjacents.Contains(exclude)) return true;
-            else return !adjacents.All(cell => tileIsOccupied(cell));
-        }
-        #endregion
     }
 }
