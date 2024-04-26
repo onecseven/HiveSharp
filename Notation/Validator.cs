@@ -18,7 +18,12 @@ namespace Hive
             }
             
             public static bool isValidRawMove(string move) => rawMoveTemplate.Match(move).Success;
-            //FIXME add isValidUnformattedMoveList
+            public static bool isValidUnformattedMoveList(string moveList) =>  moveList
+                                                                            .Split("\n")
+                                                                            .ToList<string>()
+                                                                            .Where(str => str.Count() > 0)
+                                                                            .All(isValidRawMove);
+
             internal static bool IsValidMoveListToken(string line)
             {
                 var a = line.Split(":").ToList();
