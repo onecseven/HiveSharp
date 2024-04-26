@@ -8,6 +8,9 @@ public static class IEnumerableExtensions
     => self.Select((item, index) => (item, index));
 }
 
+//TODO
+// [ ] roll our own hexgrid
+//      [ ] with get center
 namespace Hive
 {
     public enum HexOrientation
