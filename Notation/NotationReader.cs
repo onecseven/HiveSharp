@@ -10,6 +10,20 @@ namespace Hive
     {
         public partial class Reader
         {
+            public static Piece? findPieceByNotation(Board ctx, string id) {
+                System.Text.RegularExpressions.Match item = rawMoveTemplate.Match(id);
+                if (item.Success) {
+                    Subject parsed = Parser.parseUnformatted(id, true);
+                    Piece? filtering = ctx.filteredPiecesInPlay
+                                        .Select(cell => ctx.tiles[cell])
+                                        .ToList()
+                                        .Where(tile => tile.pieces.Any(piece => samePiece(parsed, piece)))
+                                        .Select(tile => tile.pieces.Find(piece => samePiece(parsed,piece)))
+                                        .First();
+                    if (filtering != null) return filtering;
+                } 
+                return null;
+            }
             internal static List<Move> Translator(List<(Subject, Objet)> moves)
             {
                 if (moves.Count == 0) return null;
@@ -64,7 +78,6 @@ namespace Hive
             }
             public static Move translateUnformattedMove(string move, Board context)
             {
-                bool samePiece(Subject a, Piece b) => a.playerMarker == b.owner && a.pieceMarker == b.type && a.numMarker == b.id;
                 var tokenized = TokenizeMoveRaw(move);
                 var parsed = (parseUnformatted(tokenized[0], true), parseUnformatted(tokenized[1], false));
                 Subject subj = parsed.Item1;
