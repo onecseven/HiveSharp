@@ -11,13 +11,14 @@ namespace Hive
     {
         internal static class Shared
         {
+            internal static bool samePiece(Subject a, Piece b) => a.playerMarker == b.owner && a.pieceMarker == b.type && a.numMarker == b.id;
+
             public static Regex rawMoveTemplate = new Regex(@"([\/\\-])?([wb]{1}){1}([SAQBMLGPsaqbmlgp]{1})([123]{1})?([\/\\-])?|([\.])");
             public static Regex moveListPattern = new Regex(@"(([\/\\-])?([wb]{1}){1}([SAQBMLGP]{1})([123]{1})?([\/\\-])?|[\.])");
             public static Regex positionalParticle = new Regex(@"([\/\\-])");
             public static Regex playerMark = new Regex(@"([wb]{1}){1}");
             public static Regex pieceParticle = new Regex(@"([SAQBMLGP]{1})");
             public static Regex numberSpecifierParticle = new Regex(@"(?:[SAQBMLGP]{1})([123]{1})");
-
             internal static Dictionary<string, Pieces> pieceDict = new Dictionary<string, Pieces>()
             {
                 ["S"] = Pieces.SPIDER,
@@ -32,7 +33,6 @@ namespace Hive
             {
                 return new Cell(origin.x + HexUtils.corners[dir].x, origin.y + HexUtils.corners[dir].y, origin.z + HexUtils.corners[dir].z);
             }
-
             internal static Dictionary<Pieces, string> reversedPieceDict = pieceDict.ToDictionary(x => x.Value, x => x.Key);
             internal static Pieces[] multiples = {
             Pieces.ANT,
