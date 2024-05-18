@@ -1,14 +1,15 @@
 using static Hive.Notation.Tokenizer;
 using static Hive.Notation.Parser;
 using static Hive.Notation.Shared;
+using System.ComponentModel.Design;
 
 namespace Hive
 {
     namespace Notation {
     public static class Writer
     {
-        private static string toNotationSubject(Pieces piece, Players player, int id = 0) => $"{(player == Players.WHITE ? 'w' : 'b')}{reversedPieceDict[piece]}{(id == 0 ? "" : id)}";
-        private static string toNotationObject(Cell location, Tile reference, bool isBeetleMove)
+        internal static string toNotationSubject(Pieces piece, Players player, int id = 0) => $"{(player == Players.WHITE ? 'w' : 'b')}{reversedPieceDict[piece]}{(id == 0 ? "" : id)}";
+        internal static string toNotationObject(Cell location, Tile reference, bool isBeetleMove)
         {
             string prelim = toNotationSubject(reference.activePiece.type, reference.activePiece.owner, reference.activePiece.id);
             if (isBeetleMove) return prelim;
@@ -46,7 +47,7 @@ namespace Hive
         {
                 #region declarations
 
-                Dictionary<Pieces, int> wInventory = new Dictionary<Pieces, int>()
+            Dictionary<Pieces, int> wInventory = new Dictionary<Pieces, int>()
             {
                 [Pieces.ANT] = 3,
                 [Pieces.SPIDER] = 2,
@@ -181,6 +182,13 @@ namespace Hive
                 }
             }
             return converted;
+        }
+        public static string cellToNotation(Board ctx, Cell cell, bool isBeetle ) {
+            if (ctx.getEmptyNeighbors(cell).Count == 6) return "";
+            else {
+                Tile neighbor = ctx.getOccupiedNeighbors(cell).Select(cell => ctx.tiles[cell]).First()!;
+                return toNotationObject(cell, neighbor, isBeetle);
+            }
         }
     }
     }
