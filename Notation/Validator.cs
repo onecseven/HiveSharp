@@ -34,17 +34,9 @@ namespace Hive
                 {
                     var moves = a[1].Split(" ").ToList<string>().Where(str => str.Count() > 0).ToList();
                     if (moves.Count != 2) return false;
-                    if (!isValidMove(moves)) return false;
+                    if (!rawMoveTemplate.Match(string.Join(" ", moves)).Success) return false;
                 }
                 return true;
-            }
-            internal static bool isValidMove(List<string> moves)
-            {
-                if (moves.Count != 2) return false; //redundant but you never know
-                string subject = moves[0];
-                string objet = moves[1];
-                if (moveListPattern.Match(subject).Success && (moveListPattern.Match(objet).Success)) return true;
-                return false;
             }
         }
     }
