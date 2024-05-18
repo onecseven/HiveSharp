@@ -19,8 +19,8 @@ namespace Hive
         public Players owner;
         public Cell location;
         public int id;
-
-        public Piece(Pieces t, Players o, Cell l, int i)
+        public string toNotation {get =>  Notation.Writer.toNotationSubject(this.type, this.owner, this.id);}
+        protected Piece(Pieces t, Players o, Cell l, int i)
         {
             type = t;
             owner = o;
